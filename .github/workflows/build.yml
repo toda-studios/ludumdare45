@@ -1,0 +1,58 @@
+name: Build & Push to S3
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container: barichello/godot-ci:latest
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: Debug
+      run: |
+        ls -all
+        pwd
+    - name: Setup environment
+      run: |
+        wget https://downloads.tuxfamily.org/godotengine/3.1.1/Godot_v3.1.1-stable_export_templates.tpz
+
+        mkdir ~/.cache
+        mkdir -p ~/.config/godot
+        mkdir -p ~/.local/share/godot/templates/3.1.1.stable
+        unzip Godot_v3.1.1-stable_export_templates.tpz
+        mv templates/* ~/.local/share/godot/templates/3.1.1.stable
+        rm -f Godot_v3.1.1-stable_export_templates.tpz
+    - name: Export Project
+      run: |
+        # Export for Linux
+        mkdir -p ./build/linux
+        godot --export Linux/X11 ./build/linux/project-vine
+
+        # Export for Windows
+        mkdir -p ./build/windows
+        godot --export "Windows Desktop" ./build/windows/project-vine.exe
+
+        # Export for OSX
+        mkdir -p ./builds/mac
+        godot --export "Mac OSX" ./build/mac/project-vine
+    - name: Package Project
+      working-directory: builds
+      run: |
+        mkdir ./packages
+          
+        zip ./packages/project-vine-linux.zip ./linux -r -i *
+
+        zip ./packages/project-vine-windows.zip ./windows -r -i *
+
+        zip ./packages/project-vine-mac.zip ./mac -r  -i *
+    - name: Ship Project to S3
+      uses: jakejarvis/s3-sync-action@master
+      with:
+        args: --acl public-read --follow-symlinks --delete
+      env:
+        SOURCE_DIR: builds/packages
+        AWS_REGION: 'us-east-1'
+        AWS_S3_BUCKET: sumu-games-pkg-us-east-1/${GITHUB_REF}
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
