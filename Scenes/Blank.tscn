@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=2]
+[gd_scene load_steps=15 format=2]
 
 [ext_resource path="res://toda.png" type="Texture" id=1]
 [ext_resource path="res://Art/gross_grass.png" type="Texture" id=2]
@@ -12,7 +12,7 @@
 [sub_resource type="ConvexPolygonShape2D" id=1]
 points = PoolVector2Array( 0, 0, 200, 0, 200, 200, 0, 200 )
 
-[sub_resource type="NavigationPolygon" id=2]
+[sub_resource type="NavigationPolygon" id=7]
 vertices = PoolVector2Array( 0, 0, 200, 0, 200, 200, 0, 200 )
 polygons = [ PoolIntArray( 0, 1, 2, 3 ) ]
 
@@ -45,7 +45,7 @@ polygons = [ PoolIntArray( 0, 1, 2, 3 ) ]
 1/autotile/tile_size = Vector2( 200, 200 )
 1/autotile/spacing = 0
 1/autotile/occluder_map = [  ]
-1/autotile/navpoly_map = [ Vector2( 0, 0 ), SubResource( 2 ) ]
+1/autotile/navpoly_map = [ Vector2( 0, 0 ), SubResource( 7 ) ]
 1/autotile/priority_map = [  ]
 1/autotile/z_index_map = [  ]
 1/occluder_offset = Vector2( 0, 0 )
@@ -62,13 +62,13 @@ animations = [ {
 } ]
 
 [sub_resource type="RectangleShape2D" id=5]
-extents = Vector2( 77.2834, 53.1393 )
+extents = Vector2( 80.5746, 53.1393 )
 
-[node name="Game" type="Node2D"]
+[sub_resource type="NavigationPolygon" id=6]
 
-[node name="Navigation2D" type="Navigation2D" parent="."]
+[node name="Game" type="Navigation2D"]
 
-[node name="Map" type="TileMap" parent="Navigation2D"]
+[node name="Map" type="TileMap" parent="."]
 tile_set = SubResource( 3 )
 cell_size = Vector2( 200, 200 )
 format = 1
@@ -80,7 +80,7 @@ zoom = Vector2( 4, 4 )
 minZoom = 3.5
 maxZoom = 4.5
 
-[node name="Unit Debug" type="KinematicBody2D" parent="."]
+[node name="Unit Debug" type="Area2D" parent="."]
 script = ExtResource( 4 )
 speed = 500
 
@@ -102,6 +102,34 @@ shape = SubResource( 5 )
 script = ExtResource( 7 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Unit Debug/Clickable"]
+shape = SubResource( 5 )
+
+[node name="NavigationPolygonInstance" type="NavigationPolygonInstance" parent="Unit Debug"]
+navpoly = SubResource( 6 )
+
+[node name="Unit Debug2" type="Area2D" parent="."]
+position = Vector2( -317.335, 136.955 )
+script = ExtResource( 4 )
+speed = 500
+
+[node name="Selection" type="Sprite" parent="Unit Debug2"]
+modulate = Color( 0, 0, 0, 1 )
+position = Vector2( 0, 30 )
+scale = Vector2( 6.4617, 2.30336 )
+texture = ExtResource( 5 )
+
+[node name="Sprite" type="AnimatedSprite" parent="Unit Debug2"]
+modulate = Color( 1, 0, 0, 1 )
+frames = SubResource( 4 )
+script = ExtResource( 6 )
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="Unit Debug2"]
+shape = SubResource( 5 )
+
+[node name="Clickable" type="Area2D" parent="Unit Debug2"]
+script = ExtResource( 7 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Unit Debug2/Clickable"]
 shape = SubResource( 5 )
 
 [node name="Player" type="Node2D" parent="."]

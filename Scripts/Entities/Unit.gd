@@ -1,10 +1,12 @@
-extends KinematicBody2D
+extends Area2D
 
 export var canMove : bool = true
 export var speed : = 10
 
 var destination = Vector2(0,0)
 var path : PoolVector2Array
+var nav2d : Navigation2D
+var navId : String
 
 
 func set_dest(new_path):
@@ -20,7 +22,12 @@ func on_select():
 func on_deselect():
 	$Selection.hide()
 
+
+
+	
 func _ready() -> void:
+	nav2d = get_node("/root").get_child(0)
+
 	# Hide selection sprite
 	$Selection.hide()
 	
@@ -31,6 +38,7 @@ func _process(delta):
     if canMove:
         $Sprite.flip_h = destination.x < position.x
 
+        check_location()
         # Move along provided movement path
         var move_distance = speed * delta
         move_along_path(move_distance)
@@ -59,3 +67,8 @@ func move_along_path(distance : float) -> void:
 		
 		# Remove processed point
 		path.remove(0)
+
+func check_location():
+	var result = get_world_2d().direct_space_state.intersect_ray(destination, destination).get('collider')
+	if(result):
+		print(result)

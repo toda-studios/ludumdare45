@@ -10,7 +10,7 @@ func _process(delta):
 	# Deselect units with there is a mouse click
 	if(Input.is_action_just_pressed("unit_select")):
 		if(lastSelectTime):
-			if lastSelectTime <= OS.get_unix_time() - 1:
+			if lastSelectTime != OS.get_unix_time():
 				select_units([])
 		else:
 			select_units([])
@@ -20,12 +20,12 @@ func _process(delta):
 		print("Setting dest for " + str(len(selectedUnits)) + " objects.")
 		
 		var dest = get_global_mouse_position()
-		var nav2d : Navigation2D = get_node("/root").get_child(0).get_node("Navigation2D")
+		var nav2d : Navigation2D = get_node("/root").get_child(0)
 		
 		for unit in selectedUnits:
 			if(unit.has_method("set_dest")):
 				# Generate navigation path based on provided nav2d
-				var path : = nav2d.get_simple_path(unit.global_position, get_global_mouse_position())
+				var path : = nav2d.get_simple_path(unit.global_position, get_global_mouse_position() + Vector2(rand_range(-150,150),rand_range(-150,150)))
 				
 				# Call movement function on unit
 				unit.set_dest(path)
