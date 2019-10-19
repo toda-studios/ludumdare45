@@ -2,6 +2,7 @@ extends Area2D
 
 export var canMove : bool = true
 export var speed : = 10
+export var team : String = "neutral"
 
 var destination = Vector2(0,0)
 var path : PoolVector2Array
@@ -26,7 +27,10 @@ func on_deselect():
 
 	
 func _ready() -> void:
-	nav2d = get_node("/root").get_child(0)
+	var team_obj = Teams.get_team_by_id(team)
+	$Sprite.modulate = Color(team_obj['color'])
+
+	nav2d = get_node("/root").get_child(1)
 
 	# Hide selection sprite
 	$Selection.hide()

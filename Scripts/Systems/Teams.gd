@@ -34,4 +34,8 @@ func get_team_by_id(id):
     for i in range(len(teams)):
         if(teams[i]['id'] == id):
             return teams[i]
-    return 'null'
+    return {
+        'id' : 'neutral',
+        'name' : 'Neutral',
+        'color' : '000000'
+    }

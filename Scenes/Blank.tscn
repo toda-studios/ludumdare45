@@ -1,13 +1,13 @@
 [gd_scene load_steps=15 format=2]
 
-[ext_resource path="res://toda.png" type="Texture" id=1]
-[ext_resource path="res://Art/gross_grass.png" type="Texture" id=2]
-[ext_resource path="res://Nodes/Entities/Camera.tscn" type="PackedScene" id=3]
-[ext_resource path="res://Scripts/Entities/Unit.gd" type="Script" id=4]
-[ext_resource path="res://Art/selection.png" type="Texture" id=5]
-[ext_resource path="res://Scripts/Components/WobblySprite.gd" type="Script" id=6]
-[ext_resource path="res://Scripts/Components/Clickable.gd" type="Script" id=7]
-[ext_resource path="res://Scripts/Systems/PlayerController.gd" type="Script" id=8]
+[ext_resource path="res://Scripts/Systems/PlayerController.gd" type="Script" id=1]
+[ext_resource path="res://Nodes/Entities/Camera.tscn" type="PackedScene" id=2]
+[ext_resource path="res://toda.png" type="Texture" id=3]
+[ext_resource path="res://Art/gross_grass.png" type="Texture" id=4]
+[ext_resource path="res://Scripts/Entities/Unit.gd" type="Script" id=5]
+[ext_resource path="res://Art/selection.png" type="Texture" id=6]
+[ext_resource path="res://Scripts/Components/WobblySprite.gd" type="Script" id=7]
+[ext_resource path="res://Scripts/Components/Clickable.gd" type="Script" id=8]
 
 [sub_resource type="ConvexPolygonShape2D" id=1]
 points = PoolVector2Array( 0, 0, 200, 0, 200, 200, 0, 200 )
@@ -18,7 +18,7 @@ polygons = [ PoolIntArray( 0, 1, 2, 3 ) ]
 
 [sub_resource type="TileSet" id=3]
 0/name = "toda.png 0"
-0/texture = ExtResource( 1 )
+0/texture = ExtResource( 3 )
 0/tex_offset = Vector2( 0, 0 )
 0/modulate = Color( 1, 1, 1, 1 )
 0/region = Rect2( 0, 0, 200, 200 )
@@ -34,7 +34,7 @@ polygons = [ PoolIntArray( 0, 1, 2, 3 ) ]
 } ]
 0/z_index = 0
 1/name = "gross_grass.png 1"
-1/texture = ExtResource( 2 )
+1/texture = ExtResource( 4 )
 1/tex_offset = Vector2( 0, 0 )
 1/modulate = Color( 1, 1, 1, 1 )
 1/region = Rect2( 0, 0, 200, 200 )
@@ -55,7 +55,7 @@ polygons = [ PoolIntArray( 0, 1, 2, 3 ) ]
 
 [sub_resource type="SpriteFrames" id=4]
 animations = [ {
-"frames": [ ExtResource( 1 ) ],
+"frames": [ ExtResource( 3 ) ],
 "loop": true,
 "name": "default",
 "speed": 5.0
@@ -68,38 +68,41 @@ extents = Vector2( 80.5746, 53.1393 )
 
 [node name="Game" type="Navigation2D"]
 
+[node name="Player" type="Node2D" parent="."]
+script = ExtResource( 1 )
+
+[node name="Camera" parent="." instance=ExtResource( 2 )]
+current = true
+zoom = Vector2( 4, 4 )
+minZoom = 3.5
+maxZoom = 4.5
+
 [node name="Map" type="TileMap" parent="."]
 tile_set = SubResource( 3 )
 cell_size = Vector2( 200, 200 )
 format = 1
 tile_data = PoolIntArray( -131075, 1, 0, -131074, 1, 0, -131073, 1, 0, -196608, 1, 0, -196607, 1, 0, -196606, 1, 0, -196605, 1, 0, -196604, 1, 0, -196603, 1, 0, -196602, 1, 0, -65539, 1, 0, -65538, 1, 0, -65537, 1, 0, -131072, 0, 0, -131071, 0, 0, -131070, 0, 0, -131069, 1, 0, -131068, 1, 0, -131067, 1, 0, -131066, 1, 0, -3, 1, 0, -2, 1, 0, -1, 1, 0, -65536, 0, 0, -65535, 0, 0, -65534, 0, 0, -65533, 0, 0, -65532, 0, 0, -65531, 1, 0, -65530, 1, 0, 65533, 1, 0, 65534, 1, 0, 65535, 1, 0, 0, 1, 0, 1, 1, 0, 2, 0, 0, 3, 0, 0, 4, 0, 0, 5, 1, 0, 6, 1, 0, 131069, 1, 0, 131070, 1, 0, 131071, 1, 0, 65536, 0, 0, 65537, 0, 0, 65538, 0, 0, 65539, 0, 0, 65540, 0, 0, 65541, 1, 0, 65542, 1, 0, 196605, 1, 0, 196606, 1, 0, 196607, 1, 0, 131072, 0, 0, 131073, 0, 0, 131074, 0, 0, 131075, 0, 0, 131076, 0, 0, 131077, 1, 0, 131078, 1, 0, 262141, 1, 0, 262142, 1, 0, 262143, 1, 0, 196608, 1, 0, 196609, 1, 0, 196610, 1, 0, 196611, 1, 0, 196612, 1, 0, 196613, 1, 0, 196614, 1, 0, 327677, 1, 0, 327678, 1, 0, 327679, 1, 0, 262144, 1, 0, 262145, 1, 0, 262146, 1, 0, 262147, 1, 0, 262148, 1, 0, 262149, 1, 0, 262150, 1, 0 )
 
-[node name="Camera" parent="." instance=ExtResource( 3 )]
-current = true
-zoom = Vector2( 4, 4 )
-minZoom = 3.5
-maxZoom = 4.5
-
 [node name="Unit Debug" type="Area2D" parent="."]
-script = ExtResource( 4 )
+script = ExtResource( 5 )
 speed = 500
 
 [node name="Selection" type="Sprite" parent="Unit Debug"]
 modulate = Color( 0, 0, 0, 1 )
 position = Vector2( 0, 30 )
 scale = Vector2( 6.4617, 2.30336 )
-texture = ExtResource( 5 )
+texture = ExtResource( 6 )
 
 [node name="Sprite" type="AnimatedSprite" parent="Unit Debug"]
 modulate = Color( 1, 0, 0, 1 )
 frames = SubResource( 4 )
-script = ExtResource( 6 )
+script = ExtResource( 7 )
 
 [node name="CollisionShape2D2" type="CollisionShape2D" parent="Unit Debug"]
 shape = SubResource( 5 )
 
 [node name="Clickable" type="Area2D" parent="Unit Debug"]
-script = ExtResource( 7 )
+script = ExtResource( 8 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Unit Debug/Clickable"]
 shape = SubResource( 5 )
@@ -109,28 +112,26 @@ navpoly = SubResource( 6 )
 
 [node name="Unit Debug2" type="Area2D" parent="."]
 position = Vector2( -317.335, 136.955 )
-script = ExtResource( 4 )
+script = ExtResource( 5 )
 speed = 500
+team = "red"
 
 [node name="Selection" type="Sprite" parent="Unit Debug2"]
 modulate = Color( 0, 0, 0, 1 )
 position = Vector2( 0, 30 )
 scale = Vector2( 6.4617, 2.30336 )
-texture = ExtResource( 5 )
+texture = ExtResource( 6 )
 
 [node name="Sprite" type="AnimatedSprite" parent="Unit Debug2"]
 modulate = Color( 1, 0, 0, 1 )
 frames = SubResource( 4 )
-script = ExtResource( 6 )
+script = ExtResource( 7 )
 
 [node name="CollisionShape2D2" type="CollisionShape2D" parent="Unit Debug2"]
 shape = SubResource( 5 )
 
 [node name="Clickable" type="Area2D" parent="Unit Debug2"]
-script = ExtResource( 7 )
+script = ExtResource( 8 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Unit Debug2/Clickable"]
 shape = SubResource( 5 )
-
-[node name="Player" type="Node2D" parent="."]
-script = ExtResource( 8 )

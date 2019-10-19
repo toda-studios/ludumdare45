@@ -1,9 +1,13 @@
 extends Node2D
 
+export var team : String = "red"
 
 #Units loop through when giving actions
 var selectedUnits = []
 var lastSelectTime 
+
+func _ready():
+	Teams.add_team("red", "ff9999")
 
 func _process(delta):
 	
@@ -20,7 +24,7 @@ func _process(delta):
 		print("Setting dest for " + str(len(selectedUnits)) + " objects.")
 		
 		var dest = get_global_mouse_position()
-		var nav2d : Navigation2D = get_node("/root").get_child(0)
+		var nav2d : Navigation2D = get_node("/root").get_child(1)
 		
 		for unit in selectedUnits:
 			if(unit.has_method("set_dest")):
@@ -57,10 +61,11 @@ func select_units(units):
 	# Add newly selected units and call `on_select()`
 	for unit in units:
 		if not unit in selectedUnits:
-			selectedUnits.append(unit)
-			if(unit.has_method("on_select")):
-				unit.on_select()
-			print("Selected: " + str(unit.name))
+			if unit.team == team:
+				selectedUnits.append(unit)
+				if(unit.has_method("on_select")):
+					unit.on_select()
+				print("Selected: " + str(unit.name))
 			
 # Adds units to selection without reseting list
 func add_to_selection(units):
